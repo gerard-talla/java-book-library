@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.1'
 	id 'io.spring.dependency-management' version '1.1.5'
-	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'org.openapi.generator' version '7.4.0'
 }
 
 group = 'com.agents'
@@ -31,13 +31,16 @@ ext {
 }
 
 dependencies {
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -54,7 +57,11 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+openApiGenerate {
+	generatorName = "spring" // Generates a Java SpringBoot Server application using the SpringDoc integration.
+	inputSpec.set("$rootDir/contracts/apispec.yaml")
+	apiPackage = "com._agents.java_book_library.api"
+	invokerPackage = "com._agents.java_book_library.api"
+	modelPackage = "com._agents.java_book_library.model"
+	generateApiTests.set(false)
 }

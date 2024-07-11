@@ -1,0 +1,525 @@
+openapi: 3.0.3
+info:
+  title: java-book-library
+  description: |-
+    This is a sample Java-Coding-Challenge 58agents: `java-book-library`. 
+
+    Some useful links:
+    - [My GitHub repository](https://github.com/gerard-talla/)
+  contact:
+    email: gerard.tchano@gmail.com
+  version: 0.0.1
+externalDocs:
+  description: Find out more about Me
+  url: https://www.linkedin.com/in/gerard-talla-tchano-a028a8135/
+servers:
+  - url: https://java-book-library.58agents.com/api
+    description: Still in Development and will coming soon
+tags:
+  - name: book
+    description: Operations about Book
+  - name: author
+    description: Operations about Author
+  - name: member
+    description: Operations about Member
+paths:
+  /book:
+    put:
+      tags:
+        - book
+      summary: Update an existing book
+      description: Update an existing book by Id
+      operationId: updateBook
+      requestBody:
+        description: Update an existent book in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+        '422':
+          description: Validation exception
+    post:
+      tags:
+        - book
+      summary: Add a new book to the database
+      description: Add a new book to the database
+      operationId: addBook
+      requestBody:
+        description: Create a new book in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    get:
+      tags:
+        - book
+      summary: Find All Books
+      description: Find All Books
+      operationId: findAllBook
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid status value
+  /book/{bookId}:
+    get:
+      tags:
+        - book
+      summary: Find Book by ID
+      description: Returns a single Book
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+    delete:
+      tags:
+        - book
+      summary: Deletes a book by ID
+      description: delete a book by ID
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Book id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+
+  /author:
+    put:
+      tags:
+        - author
+      summary: Update an existing author
+      description: Update an existing author by Id
+      operationId: updateAuthor
+      requestBody:
+        description: Update an existent author in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Author not found
+        '422':
+          description: Validation exception
+    post:
+      tags:
+        - author
+      summary: Add a new author to the database
+      description: Add a new author to the database
+      operationId: addAuthor
+      requestBody:
+        description: Create a new Author in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    get:
+      tags:
+        - author
+      summary: Find All Authors
+      description: Find All Authors
+      operationId: findAllAuthor
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid request value
+  /author/{authorId}:
+    get:
+      tags:
+        - author
+      summary: Finds Author by ID
+      description: Returns a single Author
+      operationId: getAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          description: ID of author to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Author not found
+    delete:
+      tags:
+        - author
+      summary: Deletes an author by ID
+      description: delete a author by ID
+      operationId: deleteAuthor
+      parameters:
+        - name: authorId
+          in: path
+          description: Author id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Author not found
+
+  /member:
+    put:
+      tags:
+        - member
+      summary: Update an existing member
+      description: Update an existing member by Id
+      operationId: updateMember
+      requestBody:
+        description: Update an existent member in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Author not found
+        '422':
+          description: Validation exception
+    post:
+      tags:
+        - member
+      summary: Add a new member to the database
+      description: Add a new member to the database
+      operationId: addMember
+      requestBody:
+        description: Create a new Member in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    get:
+      tags:
+        - member
+      summary: Finds All Members
+      description: Finds All Members
+      operationId: findAllMember
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+        '400':
+          description: Invalid request value
+  /member/{memberId}:
+    get:
+      tags:
+        - member
+      summary: Finds Member by ID
+      description: Returns a single Member
+      operationId: getMemberById
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Member not found
+    delete:
+      tags:
+        - member
+      summary: Deletes a member by ID
+      description: delete a member by ID
+      operationId: deleteMember
+      parameters:
+        - name: memberId
+          in: path
+          description: Member id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Member not found
+  /member/{username}:
+    get:
+      tags:
+        - member
+      summary: Finds Member by Username
+      description: Returns a single Member
+      operationId: getMemberByUsername
+      parameters:
+        - name: username
+          in: path
+          description: member's username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Member'
+        '400':
+          description: Invalid Username supplied
+        '404':
+          description: Member not found
+    delete:
+      tags:
+        - member
+      summary: Deletes an existing member by username
+      description: delete a member by username
+      operationId: deleteMemberByUsername
+      parameters:
+        - name: username
+          in: path
+          description: Member's username to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid Username supplied
+        '404':
+          description: Member not found
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        bookId:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: string
+          maxLength: 255
+        genre:
+          $ref: '#/components/schemas/Genre'
+        price:
+          type: number
+          multipleOf: 0.1
+        author:
+          $ref: '#/components/schemas/Author'
+    Author:
+      type: object
+      properties:
+        authorId:
+          type: integer
+          format: int64
+          example: 123
+        name:
+          type: string
+          maxLength: 255
+        dateOfBirth:
+          type: string
+          format: date
+        books:
+          items:
+            $ref: '#/components/schemas/Book'
+    Member:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        address:
+          $ref: '#/components/schemas/Address'
+        phoneNumber:
+          type: string
+        loanBook:
+          type: array
+          maxItems: 5
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/LoanBook'
+    Address:
+      type: object
+      properties:
+        streetAndNumber:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    LoanBook:
+      type: object
+      properties:
+        lendDate:
+          type: string
+          format: date
+        returnDate:
+          type: string
+          format: date
+        book:
+          $ref: '#/components/schemas/Book'
+    Genre:
+      type: string
+      enum:
+        - Fiction
+        - Mystery
+        - Science fiction
+        - Narrative
+        - Science
+        - Historical
+        - Novel
+        - Thriller
+        - Education
