@@ -20,7 +20,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member getOneMemberById(Integer memberId) {
+    public Member getOneMemberById(Long memberId) {
         // TODO: Add custom exception
         return memberRepository.findById(memberId).orElseThrow(() -> null);
     }
@@ -52,7 +52,7 @@ public class MemberService {
         return memberRepository.save(found);
     }
 
-    public void deleteMemberById(Integer memberId) {
+    public void deleteMemberById(Long memberId) {
         // TODO: Add custom exception
         memberRepository.findById(memberId).orElseThrow(() -> null);
         memberRepository.deleteById(memberId);

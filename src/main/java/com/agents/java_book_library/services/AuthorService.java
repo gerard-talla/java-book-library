@@ -18,7 +18,7 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
-    public Author getOneAuthor(Integer authorId) {
+    public Author getOneAuthor(Long authorId) {
         // TODO: Add custom exception
         return authorRepository.findById(authorId).orElseThrow(null);
     }
@@ -42,7 +42,7 @@ public class AuthorService {
         return authorRepository.save(found);
     }
 
-    public void deleteAuthor(Integer authorId) {
+    public void deleteAuthor(Long authorId) {
         // TODO: Add custom exception
         authorRepository.findById(authorId).orElseThrow(() -> null);
         authorRepository.deleteById(authorId);

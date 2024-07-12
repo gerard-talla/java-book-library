@@ -19,7 +19,7 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book getOneBook(Integer bookId) {
+    public Book getOneBook(Long bookId) {
         // TODO: Add custom exception
         return bookRepository.findById(bookId).orElseThrow(() -> null);
     }
@@ -40,7 +40,7 @@ public class BookService {
         return bookRepository.save(found);
     }
 
-    public void deleteBook(Integer bookId) {
+    public void deleteBook(Long bookId) {
         bookRepository.findById(bookId).orElseThrow(() -> null);
         bookRepository.deleteById(bookId);
     }
