@@ -24,7 +24,7 @@ public class Author {
 
     @Id
     @GeneratedValue
-    private Integer authorId;
+    private Long authorId;
 
     @NotBlank(message = "Name is mandatory")
     private String name;
