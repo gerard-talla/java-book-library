@@ -6,7 +6,7 @@ spring:
 #--------------------------------------------------------------------
 ## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
   datasource:
-    url: jdbc:postgresql://postgresql:5432/challengedb
+    url: jdbc:postgresql://postgresql:5432/librarydb
     username: challenge
     password: challenge
 # The SQL dialect makes Hibernate generate better SQL for the chosen database

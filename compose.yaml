@@ -1,9 +1,25 @@
 services:
+  library-api:
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      image: coming # TODO: build image and register it to docker Hup
+      container_name: library-api
+      env_file: .env
+      links:
+        - postgres
+
   postgres:
     image: 'postgres:latest'
+    container_name: library-container
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_DB=librarydb'
+      - 'POSTGRES_PASSWORD=challenge'
+      - 'POSTGRES_USER=challenge'
     ports:
-      - '5432'
+      - '5432:5432'
+    restart: always
+    volumes:
+      - '../volumes/postgresql/log:/var/log/postgresql'
