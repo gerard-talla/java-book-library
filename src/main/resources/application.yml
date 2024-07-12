@@ -1,3 +1,44 @@
 spring:
   application:
     name: java-book-library
+#--------------------------------------------------------------------
+# Datasource, JPA
+#--------------------------------------------------------------------
+## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/challengedb
+    username: challenge
+    password: challenge
+# The SQL dialect makes Hibernate generate better SQL for the chosen database
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+# Hibernate ddl auto (create, create-drop, validate, update)
+        ddl-auto: update
+# make sure that you are no longer letting Hibernate create and drop the db for you.
+# spring.jpa.hibernate.ddl-auto=none
+        show_sql: true
+
+### swagger ui
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /api/swagger-ui.html
+    url: /api/v1/api-docs
+    operations-sorter: method
+  api-docs:
+    enabled: true
+    path: /api/v1/api-docs
+  packagesToScan: com.agents.java_book_library.controllers, com.agents.java_book_library.domains
+
+### Metrics / Actuator
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure.include: "*"
+
