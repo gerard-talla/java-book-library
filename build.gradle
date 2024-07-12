@@ -60,8 +60,17 @@ tasks.named('test') {
 openApiGenerate {
 	generatorName = "spring" // Generates a Java SpringBoot Server application using the SpringDoc integration.
 	inputSpec.set("$rootDir/contracts/apispec.yaml")
-	apiPackage = "com._agents.java_book_library.api"
-	invokerPackage = "com._agents.java_book_library.api"
-	modelPackage = "com._agents.java_book_library.model"
+	apiPackage = "com.agents.java_book_library.api"
+	invokerPackage = "com.agents.java_book_library.api"
+	modelPackage = "com.agents.java_book_library.model"
 	generateApiTests.set(false)
+}
+
+// Include the generated resources in the main source set
+sourceSets {
+	main {
+		resources {
+			srcDir "$buildDir/build/generated-resources/main"
+		}
+	}
 }

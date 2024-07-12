@@ -503,6 +503,9 @@ components:
     LoanBook:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
         lendDate:
           type: string
           format: date
@@ -511,6 +514,8 @@ components:
           format: date
         book:
           $ref: '#/components/schemas/Book'
+        member:
+          $ref: '#/components/schemas/Member'
     Genre:
       type: string
       enum:
