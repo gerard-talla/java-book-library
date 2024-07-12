@@ -22,6 +22,11 @@ tags:
     description: Operations about Author
   - name: member
     description: Operations about Member
+#host:
+basePath: /api/v1
+schemes:
+  - http
+  - https
 paths:
   /book:
     put:
