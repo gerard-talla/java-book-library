@@ -1,6 +1,7 @@
 package com.agents.java_book_library.services;
 
 import com.agents.java_book_library.domains.Author;
+import com.agents.java_book_library.exceptions.AuthorNotFound;
 import com.agents.java_book_library.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class AuthorService {
     }
 
     public Author getOneAuthor(Long authorId) {
-        // TODO: Add custom exception
-        return authorRepository.findById(authorId).orElseThrow(null);
+        return authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFound(authorId));
     }
 
     public Author createAuthor(Author author) {
@@ -29,8 +30,7 @@ public class AuthorService {
     }
 
     public Author updateAuthor(Author author) {
-        // TODO: Add custom exception
-        Author found = authorRepository.findById(author.getAuthorId()).orElseThrow(null);
+        Author found = getOneAuthor(author.getAuthorId());
 
         found = Author.builder()
                 .name(author.getName())
@@ -43,8 +43,8 @@ public class AuthorService {
     }
 
     public void deleteAuthor(Long authorId) {
-        // TODO: Add custom exception
-        authorRepository.findById(authorId).orElseThrow(() -> null);
+        authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFound(authorId));
         authorRepository.deleteById(authorId);
     }
 

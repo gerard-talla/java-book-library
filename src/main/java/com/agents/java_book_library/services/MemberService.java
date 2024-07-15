@@ -1,9 +1,12 @@
 package com.agents.java_book_library.services;
 
 import com.agents.java_book_library.domains.Member;
+import com.agents.java_book_library.exceptions.MemberNotFound;
+import com.agents.java_book_library.exceptions.UsernameAlreadyExists;
 import com.agents.java_book_library.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,17 +24,21 @@ public class MemberService {
     }
 
     public Member getOneMemberById(Long memberId) {
-        // TODO: Add custom exception
-        return memberRepository.findById(memberId).orElseThrow(() -> null);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFound(null, memberId));
     }
 
     public Member getOneMemberByUsername(String username) {
-        // TODO: Add custom exception
-        return memberRepository.findByUsername(username).orElseThrow(() -> null);
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new MemberNotFound(username, null));
     }
 
     public Member createMember(Member member) {
-        return memberRepository.save(member);
+        try {
+            return memberRepository.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new UsernameAlreadyExists(member.getUsername());
+        }
     }
 
     public Member updateMember(Member member) {
@@ -49,18 +56,22 @@ public class MemberService {
                 .phoneNumber(member.getPhoneNumber())
                 .build();
 
-        return memberRepository.save(found);
+        try {
+            return memberRepository.save(found);
+        } catch (DataIntegrityViolationException e) {
+            throw new UsernameAlreadyExists(found.getUsername());
+        }
     }
 
     public void deleteMemberById(Long memberId) {
-        // TODO: Add custom exception
-        memberRepository.findById(memberId).orElseThrow(() -> null);
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFound(null, memberId));
         memberRepository.deleteById(memberId);
     }
 
     public void deleteMemberByUsername(String username) {
-        // TODO: Add custom exception
-        Member found = memberRepository.findByUsername(username).orElseThrow(() -> null);
+        Member found = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new MemberNotFound(username, null));
         memberRepository.delete(found);
     }
 }

@@ -1,6 +1,7 @@
 package com.agents.java_book_library.services;
 
 import com.agents.java_book_library.domains.Book;
+import com.agents.java_book_library.exceptions.BookNotFound;
 import com.agents.java_book_library.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class BookService {
     }
 
     public Book getOneBook(Long bookId) {
-        // TODO: Add custom exception
-        return bookRepository.findById(bookId).orElseThrow(() -> null);
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFound(bookId));
     }
 
     public Book createBook(Book book) {
@@ -41,7 +42,8 @@ public class BookService {
     }
 
     public void deleteBook(Long bookId) {
-        bookRepository.findById(bookId).orElseThrow(() -> null);
+        bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFound(bookId));
         bookRepository.deleteById(bookId);
     }
 }
