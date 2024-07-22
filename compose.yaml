@@ -5,15 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      image: coming # TODO: build image and register it to docker Hup
-      container_name: library-api
+      image: java-book-library
+      container_name: java-book-library-api
       env_file: .env
       links:
         - postgres
 
   postgres:
     image: 'postgres:latest'
-    container_name: library-container
+    container_name: java-book-library-container
     environment:
       - 'POSTGRES_DB=librarydb'
       - 'POSTGRES_PASSWORD=challenge'
