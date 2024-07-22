@@ -1,14 +1,31 @@
 package com.agents.java_book_library.domains;
 
+import lombok.Getter;
+
+@Getter
 public enum Genre {
 
-    Fiction,
-    Mystery,
-    Science_fiction,
-    Narrative,
-    Science,
-    Historical,
-    Novel,
-    Thriller,
-    Education,
+    FICTION("Fiction"),
+
+    MYSTERY("Mystery"),
+
+    SCIENCE_FICTION("Science fiction"),
+
+    NARRATIVE("Narrative"),
+
+    SCIENCE("Science"),
+
+    HISTORICAL("Historical"),
+
+    NOVEL("Novel"),
+
+    THRILLER("Thriller"),
+
+    EDUCATION("Education");
+
+    private String value;
+
+    Genre(String value) {
+        this.value = value;
+    }
 }
