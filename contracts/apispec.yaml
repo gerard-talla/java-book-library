@@ -13,8 +13,8 @@ externalDocs:
   description: Find out more about Me
   url: https://www.linkedin.com/in/gerard-talla-tchano-a028a8135/
 servers:
-  - url: https://java-book-library.58agents.com/api
-    description: Still in Development and will coming soon
+  - url: http://localhost:8080
+    description: Still in Development and will be ready soon
 tags:
   - name: book
     description: Operations about Book
@@ -22,11 +22,13 @@ tags:
     description: Operations about Author
   - name: member
     description: Operations about Member
+  - name: loan
+    description: Operations about Loan
 #host:
-basePath: /api/v1
-schemes:
-  - http
-  - https
+#basePath: /api/v1
+#schemes:
+#  - http
+#  - https
 paths:
   /book:
     put:
@@ -43,7 +45,7 @@ paths:
               $ref: '#/components/schemas/Book'
         required: true
       responses:
-        '200':
+        '204':
           description: Successful operation
           content:
             application/json:
@@ -69,7 +71,7 @@ paths:
               $ref: '#/components/schemas/Book'
         required: true
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -162,7 +164,7 @@ paths:
               $ref: '#/components/schemas/Author'
         required: true
       responses:
-        '200':
+        '204':
           description: Successful operation
           content:
             application/json:
@@ -188,7 +190,7 @@ paths:
               $ref: '#/components/schemas/Author'
         required: true
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -281,7 +283,7 @@ paths:
               $ref: '#/components/schemas/Member'
         required: true
       responses:
-        '200':
+        '204':
           description: Successful operation
           content:
             application/json:
@@ -307,7 +309,7 @@ paths:
               $ref: '#/components/schemas/Member'
         required: true
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -424,8 +426,7 @@ paths:
           description: Member's username to delete
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: successful operation
@@ -433,10 +434,170 @@ paths:
           description: Invalid Username supplied
         '404':
           description: Member not found
+  /loan:
+    put:
+      tags:
+        - loan
+      summary: Update an existing loan
+      description: Update an existing loan by Id
+      operationId: updateLoan
+      requestBody:
+        description: Update an existent loan in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoanBook'
+        required: true
+      responses:
+        '204':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanBook'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Loan not found
+        '422':
+          description: Validation exception
+    post:
+      tags:
+        - loan
+      summary: Add a new loan to the database
+      description: Add a new loan to the database
+      operationId: addLoan
+      requestBody:
+        description: Create a new Loan in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoanBook'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanBook'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    get:
+      tags:
+        - loan
+      summary: Finds All Loans
+      description: Finds All Loans
+      operationId: findAllLoan
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanBook'
+        '400':
+          description: Invalid request value
+  /loan/{memberId}:
+    get:
+      tags:
+        - loan
+      summary: Finds Loan by Member
+      description: Returns a set of Loan
+      operationId: getLoanBookByMember
+      parameters:
+        - name: memberId
+          in: path
+          description: Member ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanBook'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanBook'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Loan not found
+  /loan/{lendDate}:
+    get:
+      tags:
+        - loan
+      summary: Finds Loan by lendDate
+      description: Returns a set of Loan
+      operationId: getLoanBooksByLendDate
+      parameters:
+        - name: lendDate
+          in: path
+          description: Lend date
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanBook'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanBook'
+        '400':
+          description: Invalid Date supplied
+        '404':
+          description: Loan not found
+  /loan/{loanId}:
+    delete:
+      tags:
+        - loan
+      summary: Deletes existing loan by ID
+      description: delete a loan by ID
+      operationId: deleteLoanByID
+      parameters:
+        - name: loanId
+          in: path
+          description: Loan ID to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Loan not found
 components:
   schemas:
     Book:
       type: object
+      required:
+        - title
+        - genre
+        - author
       properties:
         bookId:
           type: integer
@@ -454,6 +615,10 @@ components:
           $ref: '#/components/schemas/Author'
     Author:
       type: object
+      required:
+        - name
+        - dateOfBirth
+        - books
       properties:
         authorId:
           type: integer
@@ -470,6 +635,11 @@ components:
             $ref: '#/components/schemas/Book'
     Member:
       type: object
+      required:
+        - username
+        - email
+        - address
+        - phoneNumber
       properties:
         memberId:
           type: integer
@@ -494,6 +664,11 @@ components:
             $ref: '#/components/schemas/LoanBook'
     Address:
       type: object
+      required:
+        - streetAndNumber
+        - postalCode
+        - city
+        - country
       properties:
         streetAndNumber:
           type: string
@@ -507,6 +682,10 @@ components:
           type: string
     LoanBook:
       type: object
+      required:
+        - lendDate
+        - returnDate
+        - book
       properties:
         id:
           type: integer
