@@ -22,5 +22,5 @@ Demo project for Java-Book-Library with Gradle
 * With Postman   
   Just call the endpoint with valid parameters
 * With Browser <br />
-  Just call the endpoint http://localhost:8080/
+  Just call the endpoint http://localhost:8080/api
 ### How to test

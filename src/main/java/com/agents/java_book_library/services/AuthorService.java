@@ -2,44 +2,46 @@ package com.agents.java_book_library.services;
 
 import com.agents.java_book_library.domains.Author;
 import com.agents.java_book_library.exceptions.AuthorNotFound;
+import com.agents.java_book_library.mappers.AuthorMapper;
+import com.agents.java_book_library.model.AuthorDTO;
 import com.agents.java_book_library.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class AuthorService {
-    @Autowired
-    private  AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
+    private final AuthorMapper mapper;
 
-    public List<Author> getAllAuthor() {
-        return authorRepository.findAll();
+    public List<AuthorDTO> getAllAuthor() {
+        return authorRepository.findAll()
+                .stream().map(mapper::toAuthorDTO)
+                .collect(Collectors.toList());
     }
 
-    public Author getOneAuthor(Long authorId) {
-        return authorRepository.findById(authorId)
-                .orElseThrow(() -> new AuthorNotFound(authorId));
+    public AuthorDTO getOneAuthor(Long authorId) {
+        return mapper.toAuthorDTO(authorRepository.findById(authorId)
+                .orElseThrow(() -> new AuthorNotFound(authorId)));
     }
 
-    public Author createAuthor(Author author) {
-        Author save = authorRepository.save(author);
-        return save;
+    public AuthorDTO createAuthor(AuthorDTO authorDTO) {
+        Author author = mapper.toAuthor(authorDTO);
+        return mapper.toAuthorDTO(authorRepository.save(author));
     }
 
-    public Author updateAuthor(Author author) {
-        Author found = getOneAuthor(author.getAuthorId());
+    public AuthorDTO updateAuthor(AuthorDTO authorDTO) {
+        AuthorDTO found = getOneAuthor(authorDTO.getAuthorId());
+        found.setName(authorDTO.getName());
+        found.setDateOfBirth(authorDTO.getDateOfBirth());
+        found.setBooks(authorDTO.getBooks());
 
-        found = Author.builder()
-                .name(author.getName())
-                .dateOfBirth(author.getDateOfBirth())
-                .books(author.getBooks())
-                .build();
-
+        Author author = mapper.toAuthor(found);
         // Update the Author
-        return authorRepository.save(found);
+        return mapper.toAuthorDTO(authorRepository.save(author));
     }
 
     public void deleteAuthor(Long authorId) {
@@ -47,6 +49,4 @@ public class AuthorService {
                 .orElseThrow(() -> new AuthorNotFound(authorId));
         authorRepository.deleteById(authorId);
     }
-
-
 }
