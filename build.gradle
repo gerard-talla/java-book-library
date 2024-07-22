@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.1'
 	id 'io.spring.dependency-management' version '1.1.5'
 	id 'org.openapi.generator' version '7.4.0'
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.22"
 }
 
 group = 'com.agents'
@@ -37,6 +38,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.openapitools:jackson-databind-nullable:0.2.6'
+	compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+	compileOnly 'javax.validation:validation-api:2.0.1.Final'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -57,20 +62,36 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+openApiValidate {
+	inputSpec = "$rootDir/contracts/apispec.yaml"
+	recommend = true
+}
+
 openApiGenerate {
 	generatorName = "spring" // Generates a Java SpringBoot Server application using the SpringDoc integration.
 	inputSpec.set("$rootDir/contracts/apispec.yaml")
+	outputDir.set("$buildDir/generated/api")
 	apiPackage = "com.agents.java_book_library.api"
 	invokerPackage = "com.agents.java_book_library.api"
 	modelPackage = "com.agents.java_book_library.model"
+	modelNameSuffix = "DTO"
+	validateSpec = true
 	generateApiTests.set(false)
+	configOptions = [
+			useLombok: "true",
+			java17: "true",
+			dateLibrary: "java17",
+			interfaceOnly: "true",
+			useBeanValidation: "true"
+
+	]
 }
 
-// Include the generated resources in the main source set
+// Include the generated api in the main java source set
 sourceSets {
 	main {
-		resources {
-			srcDir "$buildDir/build/generated-resources/main"
+		java {
+			srcDir("$buildDir/generated/api/src/main/java")
 		}
 	}
 }
