@@ -83,7 +83,6 @@ openApiGenerate {
 			dateLibrary: "java17",
 			interfaceOnly: "true",
 			useBeanValidation: "true"
-
 	]
 }
 
