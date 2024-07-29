@@ -14,7 +14,7 @@ To run the project locally. it is required to run the command in cli as followin
 * `./gradlew clean openApiGenerate`
 Generate code via Open API Tools Generator for Open API 3.0.3 specification documents form the contract that we define first.
 * `./gradlew build`: to make sure the project compile and build as expected and generate the artifacts
-* `./gradlew run`: to start the project.
+* `./gradlew boot run`: to start the project.
 
 #### Running the application with docker compose
 
